@@ -15,7 +15,7 @@ RUN mvn clean install
 FROM openjdk:11
 
 # Step 6: Set the working directory in the runtime container
-WORKDIR /app
+#WORKDIR /app
 
 # Step 7: Copy the built JAR file from the builder stage
 COPY target/rest-http-2.7.18-2-SNAPSHOT.jar rest-http.jar
