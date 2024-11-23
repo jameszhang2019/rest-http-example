@@ -9,7 +9,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Step 4: Build the application
-RUN mvn clean package -DskipTests
+RUN mvn clean install
 
 # Step 5: Use a lightweight JDK image for runtime
 FROM openjdk:11
