@@ -18,7 +18,7 @@ FROM openjdk:11
 WORKDIR /app
 
 # Step 7: Copy the built JAR file from the builder stage
-COPY target/*.jar rest-http.jar
+COPY target/rest-http-2.7.18-2-SNAPSHOT.jar rest-http.jar
 
 # Step 8: Expose the port your application runs on
 EXPOSE 8080
