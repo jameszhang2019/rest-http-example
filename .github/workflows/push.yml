@@ -1,33 +1,41 @@
-name: "Push Images"
+name: OpenShift CI/CD Pipeline with Image Build
+
 on:
-  workflow_dispatch:
   push:
     branches:
       - sb-2.5.x
+
 jobs:
-  push:
-    name: Push Images to Quay.io
+  build-and-deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: [ 11 ]
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      - name: Setup Java
-        uses: actions/setup-java@v2.3.1
-        with:
-          java-version: ${{ matrix.java }}
-          distribution: 'adopt'
-          cache: 'maven'
-      - name: Quay.io Login
-        run: docker login quay.io -u="${{secrets.QUAY_USER}}" -p="${{secrets.QUAY_TOKEN}}"
-      - name: Build
-        run: ./mvnw -s .github/mvn-settings.xml clean package
-      - name: Push Image to Quay.io
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build and push Docker image
+        env:
+          REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
         run: |
-          CONTAINER_REGISTRY=quay.io/snowdrop
-          IMAGE=spring-boot-rest-http-example:2.5.8
-          docker build . -t $IMAGE
-          docker tag $IMAGE $CONTAINER_REGISTRY/$IMAGE
-          docker push $CONTAINER_REGISTRY/$IMAGE
+          echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER --password-stdin
+          docker build --tag rest-http-example .
+          docker tag rest-http-example:latest jameszhang2019/rest-http-example:latest
+          docker push jameszhang2019/rest-http-example:latest
+
+      - name: Set up OpenShift CLI
+        run: |
+          curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+          tar -xvf openshift-client-linux.tar.gz
+          sudo mv oc /usr/local/bin/
+
+      - name: Login to OpenShift
+        env:
+          OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
+          OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
+        run: |
+          oc login $OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
+
+      - name: Update Deployment with New Image
+        run: |
+          oc set image deployment/rest-http-example rest-http-example=docker.io/jameszhang2019/rest-http-example:latest
