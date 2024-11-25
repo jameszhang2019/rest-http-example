@@ -36,11 +36,26 @@ jobs:
         run: |
           oc login --server=$OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
 
-      - name: Update Deployment with New Image
+      - name: OpenShift Set OPENSHIFT_PROJECT_NAME
         run: |
           oc project ${{ secrets.OPENSHIFT_PROJECT_NAME }}
+
+      - name: OpenShift Scale down current deployment
+        run: |
           oc scale deployment/rest-http-example --replicas=0
+
+      - name: OpenShift Update Deployment with New Image
+        run: |
           oc set image deployment/rest-http-example rest-http-example=docker.io/jameszhang2019/rest-http-example:latest
+
+      - name: OpenShift Rollout restart deployment
+        run: |
           oc rollout restart deployment/rest-http-example
+
+      - name: OpenShift Rollout status deployment
+        run: |
           oc rollout status deployment/rest-http-example
+
+      - name: OpenShift get pods
+        run: |
           oc get pods
