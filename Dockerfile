@@ -12,16 +12,16 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Step 5: Use a lightweight JDK image for runtime
-FROM openjdk:11
+FROM openjdk:17-jdk-slim
 
 # Step 6: Set the working directory in the runtime container
 WORKDIR /app
 
 # Step 7: Copy the built JAR file from the builder stage
-COPY /target/*.jar rest-http.jar
+COPY --from=builder /app/target/*.jar rest-http.jar
 
 # Step 8: Expose the port your application runs on
 EXPOSE 8080
 
 # Step 9: Define the command to run the application
-CMD java ${JAVA_OPTS} -jar rest-http.jar
+CMD ["java", "-jar", "rest-http.jar"]
