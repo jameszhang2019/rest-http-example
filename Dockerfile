@@ -23,5 +23,5 @@ COPY --from=builder /app/target/*.jar rest-http.jar
 # Step 8: Expose the port your application runs on
 EXPOSE 8080
 
-# Step 9: Define the command to run the application
+# Step 9: Define the command to run the application test
 CMD ["java", "-jar", "rest-http.jar"]
