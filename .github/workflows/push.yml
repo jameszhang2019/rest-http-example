@@ -38,4 +38,9 @@ jobs:
 
       - name: Update Deployment with New Image
         run: |
+          oc project ${{ secrets.OPENSHIFT_PROJECT_NAME }}
+          oc scale deployment/rest-http-example --replicas=0
           oc set image deployment/rest-http-example rest-http-example=docker.io/jameszhang2019/rest-http-example:latest
+          oc rollout restart deployment/rest-http-example
+          oc rollout status deployment/rest-http-example
+          oc get pods
