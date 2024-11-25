@@ -34,7 +34,7 @@ jobs:
           OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
           OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
         run: |
-          oc login $OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
+          oc login --server=$OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
 
       - name: Update Deployment with New Image
         run: |
