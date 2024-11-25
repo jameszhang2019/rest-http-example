@@ -55,7 +55,7 @@ jobs:
 #      - name: OpenShift Rollout status deployment
 #        run: |
 #          oc rollout status deployment/rest-http-example
-#test
+#test1
       - name: OpenShift get pods
         run: |
           oc get pods
