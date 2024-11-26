@@ -1,0 +1,62 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: rest-http-example
+  namespace: jamesredhat2024-dev
+  uid: 26262f29-3ec4-4d2c-ba39-74ee47ede8d1
+  resourceVersion: '2760542921'
+  creationTimestamp: '2024-11-25T15:13:24Z'
+  labels:
+    app: rest-http-example
+    app.kubernetes.io/component: rest-http-example
+    app.kubernetes.io/instance: rest-http-example
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  managedFields:
+    - manager: oc
+      operation: Update
+      apiVersion: v1
+      time: '2024-11-25T15:13:24Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:openshift.io/generated-by': {}
+          'f:labels':
+            .: {}
+            'f:app': {}
+            'f:app.kubernetes.io/component': {}
+            'f:app.kubernetes.io/instance': {}
+        'f:spec':
+          'f:internalTrafficPolicy': {}
+          'f:ports':
+            .: {}
+            'k:{"port":8080,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+          'f:selector': {}
+          'f:sessionAffinity': {}
+          'f:type': {}
+spec:
+  clusterIP: 172.30.129.141
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  internalTrafficPolicy: Cluster
+  clusterIPs:
+    - 172.30.129.141
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    deployment: rest-http-example
+status:
+  loadBalancer: {}

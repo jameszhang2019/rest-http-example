@@ -40,22 +40,14 @@ jobs:
         run: |
           oc project ${{ secrets.OPENSHIFT_PROJECT_NAME }}
 
-#      - name: OpenShift Scale down current deployment
-#        run: |
-#          oc scale deployment/rest-http-example --replicas=0
-
-      - name: OpenShift Update Deployment with New Image
+      - name: OpenShift Apply Deployment
         run: |
-          oc set image deployment/rest-http-example rest-http-example=docker.io/jameszhang2019/rest-http-example:latest
+          oc apply -f helm/deployment.yaml
 
-      - name: OpenShift Rollout restart deployment
+      - name: OpenShift Apply service
         run: |
-          oc rollout restart deployment/rest-http-example
+          oc apply -f helm/service.yaml
 
-#      - name: OpenShift Rollout status deployment
-#        run: |
-#          oc rollout status deployment/rest-http-example
-#test1
-      - name: OpenShift get pods
+      - name: OpenShift Apply route
         run: |
-          oc get pods
+          oc apply -f helm/route.yaml

@@ -1,0 +1,64 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: rest-http-example
+  namespace: jamesredhat2024-dev
+  uid: 1f22f33f-f5ca-457a-bd23-01127f747a7b
+  resourceVersion: '2760548585'
+  creationTimestamp: '2024-11-25T15:15:51Z'
+  labels:
+    app: rest-http-example
+    app.kubernetes.io/component: rest-http-example
+    app.kubernetes.io/instance: rest-http-example
+  annotations:
+    openshift.io/host.generated: 'true'
+  managedFields:
+    - manager: oc
+      operation: Update
+      apiVersion: route.openshift.io/v1
+      time: '2024-11-25T15:15:51Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:labels':
+            .: {}
+            'f:app': {}
+            'f:app.kubernetes.io/component': {}
+            'f:app.kubernetes.io/instance': {}
+        'f:spec':
+          'f:port':
+            .: {}
+            'f:targetPort': {}
+          'f:to':
+            'f:kind': {}
+            'f:name': {}
+            'f:weight': {}
+          'f:wildcardPolicy': {}
+    - manager: openshift-router
+      operation: Update
+      apiVersion: route.openshift.io/v1
+      time: '2024-11-25T15:15:51Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:ingress': {}
+      subresource: status
+spec:
+  host: rest-http-example-jamesredhat2024-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com
+  to:
+    kind: Service
+    name: rest-http-example
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: rest-http-example-jamesredhat2024-dev.apps.sandbox-m4.g2pi.p1.openshiftapps.com
+      routerName: default
+      conditions:
+        - type: Admitted
+          status: 'True'
+          lastTransitionTime: '2024-11-25T15:15:51Z'
+      wildcardPolicy: None
+      routerCanonicalHostname: router-default.apps.sandbox-m4.g2pi.p1.openshiftapps.com
