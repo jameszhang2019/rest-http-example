@@ -29,7 +29,7 @@ public class Greeting {
     public Greeting(String content) {
         this.content = content;
     }
-
+//test
     public String getContent() {
         return content;
     }
