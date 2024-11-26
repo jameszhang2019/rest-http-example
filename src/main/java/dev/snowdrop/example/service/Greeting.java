@@ -21,6 +21,7 @@ public class Greeting {
     public static final String FORMAT = "Hello, %s!";
 
     private final String content;
+    private static final String PASSWORD = "12345";
 
     public Greeting() {
         this.content = null;
