@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - sb-2.5.x
+    paths:
+      - 'helm/Deployment.yaml'
+      - 'helm/Service.yaml'
+      - 'helm/Route.yaml'
 
 jobs:
   build-and-deploy:
@@ -42,12 +46,12 @@ jobs:
 
       - name: OpenShift Apply Deployment
         run: |
-          oc apply -f helm/deployment.yaml
+          oc apply -f Deployment.yaml
 
       - name: OpenShift Apply service
         run: |
-          oc apply -f helm/service.yaml
+          oc apply -f Service.yaml
 
       - name: OpenShift Apply route
         run: |
-          oc apply -f helm/route.yaml
+          oc apply -f Route.yaml
