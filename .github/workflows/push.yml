@@ -43,7 +43,7 @@ jobs:
       - name: OpenShift Set OPENSHIFT_PROJECT_NAME
         run: |
           oc project ${{ secrets.OPENSHIFT_PROJECT_NAME }}
-
+#test
       - name: OpenShift Apply Deployment
         run: |
           oc apply -f Deployment.yaml
