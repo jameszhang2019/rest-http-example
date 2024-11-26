@@ -30,13 +30,14 @@ jobs:
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn -B sonar:sonar \
-            -Dsonar.projectKey=rest-http-example \
-            -Dsonar.organization=jameszhang2019 \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.qualitygate.wait=true
+        run:
+           mvn -B sonar:sonar -Dsonar.projectKey=rest-http-example -Dsonar.organization=jameszhang2019 -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true
+#          mvn -B sonar:sonar \
+#            -Dsonar.projectKey=rest-http-example \
+#            -Dsonar.organization=jameszhang2019 \
+#            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+#            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+#            -Dsonar.qualitygate.wait=true
 
   build-and-deploy:
     runs-on: ubuntu-latest
