@@ -31,13 +31,13 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run:
-           mvn -B -U clean package sonar:sonar -Dsonar.projectKey=rest-http-example -Dsonar.organization=jameszhang2019 -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true -Dsonar.coverage.exclusions=**/*
-#          mvn -B sonar:sonar \
-#            -Dsonar.projectKey=rest-http-example \
-#            -Dsonar.organization=jameszhang2019 \
-#            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-#            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-#            -Dsonar.qualitygate.wait=true
+          mvn -B -U clean compile sonar:sonar \
+            -Dsonar.projectKey=rest-http-example \
+            -Dsonar.organization=jameszhang2019 \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.coverage.exclusions=**/*
 
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -76,14 +76,10 @@ jobs:
         run: |
           oc project ${{ secrets.OPENSHIFT_PROJECT_NAME }}
 
-      - name: OpenShift Apply Deployment
+      - name: OpenShift Update Deployment with New Image
         run: |
-          oc apply -f ./Deployment.yaml
+          oc set image deployment/rest-http-example rest-http-example=docker.io/jameszhang2019/rest-http-example:latest
 
-      - name: OpenShift Apply service
+      - name: OpenShift Rollout restart deployment
         run: |
-          oc apply -f ./Service.yaml
-
-      - name: OpenShift Apply route
-        run: |
-          oc apply -f ./Route.yaml
+          oc rollout restart deployment/rest-http-example
