@@ -1,4 +1,4 @@
-name: OpenShift CI/CD Pipeline with Image Build
+name: OpenShift CI/CD Pipeline with GitHub Action
 
 on:
   push:
@@ -27,13 +27,16 @@ jobs:
           cache: 'maven'
       - name: Run SonarQube Analysis
         if: steps.changes.outputs.src == 'true'
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run:
-          mvn -B -U clean compile sonar:sonar -Dsonar.projectKey=rest-http-example -Dsonar.organization=jameszhang2019 -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true -Dsonar.coverage.exclusions=**/*
+          mvn -B -U clean compile sonar:sonar -Dsonar.projectKey=rest-http-example -Dsonar.organization=jameszhang2019 -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.qualitygate.wait=true -Dsonar.coverage.exclusions=**/*
 #          mvn -B -U clean compile sonar:sonar \
 #            -Dsonar.projectKey=rest-http-example \
 #            -Dsonar.organization=jameszhang2019 \
-#            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-#            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+#            -Dsonar.host.url=$SONAR_HOST_URL \
+#            -Dsonar.login=$SONAR_TOKEN \
 #            -Dsonar.qualitygate.wait=true \
 #            -Dsonar.coverage.exclusions=**/*
 
@@ -67,12 +70,13 @@ jobs:
         env:
           OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
           OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
+          OPENSHIFT_PROJECT_NAME: ${{ secrets.OPENSHIFT_PROJECT_NAME }}
         run: |
           oc login --server=$OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
 
       - name: OpenShift Set OPENSHIFT_PROJECT_NAME
         run: |
-          oc project ${{ secrets.OPENSHIFT_PROJECT_NAME }}
+          oc project $OPENSHIFT_PROJECT_NAME
 
       - name: OpenShift Update Deployment with New Image
         run: |
